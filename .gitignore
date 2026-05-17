@@ -1,0 +1,12 @@
+ETTm1/
+.ipynb_checkpoints/
+__pycache__/
+condaenv.6u34qjaq.requirements.txt
+data/
+data_provider/__pycache__/
+*.pyc
+*.output
+*.h5
+*.log
+logs/
+output/
