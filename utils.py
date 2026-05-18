@@ -159,9 +159,11 @@ def Lgb_train_and_predict(train, test, config, gkf=False, aug=None, output_root=
                 train_set  = trn_data,
                 num_boost_round   = rounds,
                 valid_sets = [trn_data,val_data],
-                evals_result = evals_result_dic,
-                early_stopping_rounds = early_stopping_rounds,
-                verbose_eval = verbose
+                callbacks=[
+                    lgb.record_evaluation(evals_result_dic),
+                    lgb.early_stopping(stopping_rounds=early_stopping_rounds),
+                    lgb.log_evaluation(period=verbose)
+                ]
             )
             model.save_model(output_path + '/fold%s.ckpt'%fold)
 
@@ -272,9 +274,11 @@ def Lgb_train(train, config, gkf=False, aug=None, output_root='./output/', run_i
                 train_set  = trn_data,
                 num_boost_round   = rounds,
                 valid_sets = [trn_data,val_data],
-                evals_result = evals_result_dic,
-                early_stopping_rounds = early_stopping_rounds,
-                verbose_eval = verbose
+                callbacks=[
+                    lgb.record_evaluation(evals_result_dic),
+                    lgb.early_stopping(stopping_rounds=early_stopping_rounds),
+                    lgb.log_evaluation(period=verbose)
+                ]
             )
             model.save_model(output_path + '/fold%s.ckpt'%fold)
 
