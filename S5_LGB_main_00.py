@@ -1,0 +1,80 @@
+import warnings
+warnings.simplefilter('ignore')
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import gc,os,random
+import time,datetime
+from tqdm import tqdm
+from sklearn.preprocessing import LabelEncoder
+
+from utils import *
+from model import *
+root = args.root
+seed = args.seed
+
+print("S5_LGB_main_00 started!")
+
+input_folder = '~/000_data/taiwan/original_100pct/'
+
+lgb_config = {
+    'lgb_params':{
+                  'objective' : 'binary',
+                  'metric' : 'binary_logloss',
+                  'boosting': 'dart',
+                  'max_depth' : -1,
+                  'num_leaves' : 64,
+                  'learning_rate' : 0.035,
+                  'bagging_freq': 5,
+                  'bagging_fraction' : 0.75,
+                  'feature_fraction' : 0.05,
+                  'min_data_in_leaf': 256,
+                  'max_bin': 63,
+                  'min_data_in_bin': 256,
+                  # 'min_sum_heassian_in_leaf': 10,
+                  'tree_learner': 'serial',
+                  'boost_from_average': 'false',
+                  'lambda_l1' : 0.1,
+                  'lambda_l2' : 30,
+                  'num_threads': 24,
+                  'verbosity' : 1,
+    },
+    'feature_name':[],
+    # 'rounds':4500,
+    'rounds':1500,
+    'early_stopping_rounds':100,
+    'verbose_eval':50,
+    'folds':5,
+    'seed':seed
+}
+
+df = pd.read_feather(f'{input_folder}/all_feature.feather')
+
+train_y =  pd.read_csv(f'{input_folder}/train_labels.csv')
+# train = df[:train_y.shape[0]]
+train = df.merge(train_y, on = 'customer_ID')
+train['target'] = train_y['target']
+
+# test = df[train_y.shape[0]:].reset_index(drop=True)
+test_y =  pd.read_csv(f'{input_folder}/test_labels.csv')
+test = df.merge(test_y, on = 'customer_ID')
+
+del df
+
+print(train.shape,test.shape)
+
+# lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2'] and 'target' not in col]
+# Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature')
+
+train.to_feather(f'{input_folder}/lgb_train.feather')
+test.to_feather(f'{input_folder}/lgb_test.feather')
+
+# test = pd.read_feather(f'{input_folder}/lgb_test.feather')
+# Lgb_predict(test,lgb_config,aug=None,run_id='LGB_with_manual_feature')
+
+# lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2']]
+# Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature_and_series_oof')
+# Lgb_predict(test,lgb_config,aug=None,run_id='LGB_with_manual_feature_and_series_oof')
+
+print("S5_LGB_main_00 done!")
