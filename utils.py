@@ -22,6 +22,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--root", type=str, default='./input/')
+parser.add_argument("--input_folder", type=str, default='~/000_data/taiwan/original_100pct/')
 parser.add_argument("--save_dir", type=str, default='tmp')
 parser.add_argument("--use_apm", action='store_true', default=False)
 parser.add_argument("--num_workers", type=int, default=16)
@@ -415,15 +416,17 @@ class TaskDataset:
         return {'batch_series':batch_series,'batch_mask':batch_mask,'batch_feature':batch_feature,'batch_y':batch_y}
 
 
-try:
-    nn_series_sample_col_count = pd.read_feather(f'./input/nn_series__sample.feather').shape[1]-1
-except:
-    pass
+input_folder = args.input_folder
 
 try:
-    nn_feature_sample_col_count = pd.read_feather(f'./input/nn_all_feature.feather').shape[1]-1
-except:
-    pass
+    nn_series_sample_col_count = pd.read_feather(f'{input_folder}/nn_series__sample.feather').shape[1]-1
+except Exception as e:
+    print(f"Error loading nn_series__sample: {e}")
+
+try:
+    nn_feature_sample_col_count = pd.read_feather(f'{input_folder}/nn_all_feature.feather').shape[1]-1
+except Exception as e:
+    print(f"Error loading nn_all_feature: {e}")
 
 hidden_dim = 32 
 def NN_train_and_predict(train, test, model_class, config, use_series_oof, logit=False, output_root='./output/', run_id=None):

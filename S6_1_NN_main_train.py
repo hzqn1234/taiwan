@@ -15,7 +15,7 @@ seed = args.seed
 
 print("S6_1_NN_main_train started!")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+input_folder = args.input_folder
 
 nn_config = {
     'id_name':id_name,

@@ -31,7 +31,7 @@ nn_config = {
 
 print("S6_0_NN_PreProcess_1 started...")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+input_folder = args.input_folder
 
 def GreedyFindBin(distinct_values, counts,num_distinct_values, max_bin, total_cnt, min_data_in_bin=3):
 #INPUT:

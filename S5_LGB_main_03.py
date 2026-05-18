@@ -14,8 +14,7 @@ from model import *
 root = args.root
 seed = args.seed
 
-
-print("S5_LGB_main_01 started!")
+print("S5_LGB_main_03 started!")
 
 input_folder = args.input_folder
 
@@ -25,8 +24,8 @@ lgb_config = {
                   'metric' : 'binary_logloss',
                   'boosting': 'dart',
                   'max_depth' : -1,
-                  'num_leaves' : 64, #64,
-                  'learning_rate' : 0.035, #0.035,
+                  'num_leaves' : 64,
+                  'learning_rate' : 0.035,
                   'bagging_freq': 5,
                   'bagging_fraction' : 0.75,
                   'feature_fraction' : 0.05,
@@ -41,7 +40,7 @@ lgb_config = {
                   'num_threads': 24,
                   'verbosity' : 1,
     },
-    # 'feature_name':[],
+    'feature_name':[],
     # 'rounds':4500,
     'rounds':1500,
     'early_stopping_rounds':100,
@@ -55,22 +54,22 @@ lgb_config = {
 # train_y =  pd.read_csv(f'{root}/train_labels.csv')
 # train = df[:train_y.shape[0]]
 # train['target'] = train_y['target']
-# # test = df[train_y.shape[0]:].reset_index(drop=True)
+# test = df[train_y.shape[0]:].reset_index(drop=True)
 # del df
 
 # print(train.shape,test.shape)
 
-train = pd.read_feather(f'{input_folder}/lgb_train.feather')
-lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2'] and 'target' not in col]
-Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature')
-
+# lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2'] and 'target' not in col]
+# Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature')
 # test.to_feather(f'{input_folder}/lgb_test.feather')
 
 # test = pd.read_feather(f'{input_folder}/lgb_test.feather')
 # Lgb_predict(test,lgb_config,aug=None,run_id='LGB_with_manual_feature')
 
-# lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2']]
-# Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature_and_series_oof')
+train = pd.read_feather(f'{input_folder}/lgb_train.feather')
+lgb_config['feature_name'] = [col for col in train.columns if col not in [id_name,label_name,'S_2']]
+Lgb_train(train,lgb_config,aug=None,run_id='LGB_with_manual_feature_and_series_oof')
 # Lgb_predict(test,lgb_config,aug=None,run_id='LGB_with_manual_feature_and_series_oof')
 
-print("S5_LGB_main_01 done!")
+
+print("S5_LGB_main_03 done!")

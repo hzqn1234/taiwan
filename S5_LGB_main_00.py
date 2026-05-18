@@ -16,7 +16,7 @@ seed = args.seed
 
 print("S5_LGB_main_00 started!")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+input_folder = args.input_folder
 
 lgb_config = {
     'lgb_params':{

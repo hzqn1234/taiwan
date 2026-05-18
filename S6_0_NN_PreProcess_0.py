@@ -31,7 +31,7 @@ nn_config = {
 
 print("S6_0_NN_PreProcess_0 started...")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+input_folder = args.input_folder
 
 df_full =  pd.read_feather(f'{input_folder}/nn_series.feather')
 df_full['idx'] = df_full.index

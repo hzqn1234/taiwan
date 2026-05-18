@@ -13,6 +13,10 @@ from model import *
 root = args.root
 seed = args.seed
 
+print("S6_2_NN_main_test started!")
+
+input_folder = args.input_folder
+
 nn_config = {
     'id_name':id_name,
     'feature_name':[],
@@ -29,15 +33,15 @@ nn_config = {
     'remark': args.remark
 }
 
-df_nn_series_test     = pd.read_feather('./input/df_nn_series_test.feather')
-df_nn_series_idx_test = pd.read_feather('./input/df_nn_series_idx_test.feather')
-y = pd.read_csv('./input/train_labels.csv')
+df_nn_series_test     = pd.read_feather(f'{input_folder}/df_nn_series_test.feather')
+df_nn_series_idx_test = pd.read_feather(f'{input_folder}/df_nn_series_idx_test.feather')
+y = pd.read_csv(f'{input_folder}/train_labels.csv')
  
 
 if not args.use_fe:
     df_nn_feature_test = df_nn_series_test[['customer_ID']].drop_duplicates().reset_index(drop=True)
     # df_nn_feature_test = pd.DataFrame([None]*len(y))
-    # df_nn_feature_test = pd.read_feather('./input/df_nn_feature_test.feather')
+    # df_nn_feature_test = pd.read_feather(f'{input_folder}/df_nn_feature_test.feather')
     
     NN_predict(     [df_nn_series_test,df_nn_feature_test,df_nn_series_idx_test.values]
                  ,Amodel
@@ -47,7 +51,7 @@ if not args.use_fe:
                 )
 
 else:
-    df_nn_feature_test = pd.read_feather('./input/df_nn_feature_test.feather')
+    df_nn_feature_test = pd.read_feather(f'{input_folder}/df_nn_feature_test.feather')
     
     NN_predict(     [df_nn_series_test,df_nn_feature_test,df_nn_series_idx_test.values]
                  ,Amodel
@@ -57,13 +61,5 @@ else:
             )
 
 
-# df =  pd.read_feather('./input/nn_series.feather')
-# y = pd.read_csv('./input/train_labels.csv')
-
-# f = pd.read_feather('./input/nn_all_feature.feather')
-# df['idx'] = df.index
-# series_idx = df.groupby('customer_ID',sort=False).idx.agg(['min','max'])
-# series_idx['feature_idx'] = np.arange(len(series_idx))
-# df = df.drop(['idx'],axis=1)
-# print(f.head())
+print("S6_2_NN_main_test done!")
 
