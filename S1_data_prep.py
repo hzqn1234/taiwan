@@ -14,9 +14,17 @@
 
 import pandas as pd
 import numpy as np
+import argparse
 from ucimlrepo import fetch_ucirepo 
 
 print("S1 data preparation started!")
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--data_seed", type=int, default=42)
+parser.add_argument("--input_folder", type=str, default=None)
+args = parser.parse_args()
+if args.input_folder is None:
+    args.input_folder = f"~/000_data/taiwan/original_100pct_seed{args.data_seed}/"
 
 # fetch dataset 
 default_of_credit_card_clients = fetch_ucirepo(id=350) 
@@ -27,7 +35,7 @@ y = default_of_credit_card_clients.data.targets
 
 print(f"check null values: {x.isna().sum().sum()}")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+input_folder = args.input_folder
 
 y = y.reset_index().rename({'index':'customer_ID', 'Y':'target'}, axis=1)
 y.to_csv(f'{input_folder}/label.csv', index=False)
@@ -36,7 +44,7 @@ train_ratio, test_ratio = 0.7, 0.3
 train_list = []
 test_list = []
 
-seed = 42
+seed = args.data_seed
 np.random.seed(seed)
 
 for i in range(len(y)):

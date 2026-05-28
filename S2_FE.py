@@ -1,10 +1,18 @@
 import pandas as pd
 import numpy as np
+import argparse
 from tqdm import tqdm
 
 print("S2 feature engineering started!")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+parser = argparse.ArgumentParser()
+parser.add_argument("--data_seed", type=int, default=42)
+parser.add_argument("--input_folder", type=str, default=None)
+args = parser.parse_args()
+if args.input_folder is None:
+    args.input_folder = f"~/000_data/taiwan/original_100pct_seed{args.data_seed}/"
+
+input_folder = args.input_folder
 
 def GreedyFindBin(distinct_values, counts,num_distinct_values, max_bin, total_cnt, min_data_in_bin=3):
 #INPUT:

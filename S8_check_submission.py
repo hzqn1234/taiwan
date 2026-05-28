@@ -9,11 +9,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gc,os,random
 import time,datetime
+import argparse
 from tqdm import tqdm
 
 print("S8_check_submission started!")
 
-input_folder = '~/000_data/taiwan/original_100pct/'
+parser = argparse.ArgumentParser()
+parser.add_argument("--data_seed", type=int, default=42)
+parser.add_argument("--input_folder", type=str, default=None)
+args = parser.parse_args()
+if args.input_folder is None:
+    args.input_folder = f"~/000_data/taiwan/original_100pct_seed{args.data_seed}/"
+
+input_folder = args.input_folder
 
 p0 = pd.read_csv('./output/LGB_with_manual_feature/submission.csv.zip')
 # p1 = pd.read_csv('./output/LGB_with_manual_feature_and_series_oof/submission.csv.zip')

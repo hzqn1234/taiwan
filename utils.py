@@ -22,12 +22,13 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--root", type=str, default='./input/')
-parser.add_argument("--input_folder", type=str, default='~/000_data/taiwan/original_100pct/')
+parser.add_argument("--input_folder", type=str, default=None)
 parser.add_argument("--save_dir", type=str, default='tmp')
 parser.add_argument("--use_apm", action='store_true', default=False)
 parser.add_argument("--num_workers", type=int, default=16)
 parser.add_argument("--do_train", action='store_true', default=False)
 parser.add_argument("--test", action='store_true', default=False)
+parser.add_argument("--data_seed", type=int, default=42)
 parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--remark", type=str, default='')
 
@@ -36,6 +37,8 @@ parser.add_argument("--lr", type=float, default=10000e-7)
 parser.add_argument("--use_fe", action='store_true', default=False)
 
 args, unknown = parser.parse_known_args()
+if args.input_folder is None:
+    args.input_folder = f"~/000_data/taiwan/original_100pct_seed{args.data_seed}/"
 
 def Seed_everything(seed=42):
     random.seed(seed)
